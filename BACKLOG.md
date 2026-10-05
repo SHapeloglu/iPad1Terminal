@@ -1,21 +1,22 @@
-# BACKLOG.md — iPad1Terminal Fikir / Özellik Havuzu
+# BACKLOG.md — iPad1Terminal
 
-Bu dosya henüz önceliklendirilmemiş, "bir gün yapılabilir" fikirler ve özellik talepleri içindir. Bir fikir somutlaşıp sıraya girdiğinde buradan çıkar, `TASKS.md`ye taşınır.
+Scheduled work: `TASKS.md` phases 0–6 (bootstrap → local PTY → input/UI → ANSI/VT100 screen model → SSH via the installed `ssh` binary under PTY → usability → stability). Context: `PROJECT_CONTEXT.md`.
 
-## Fikirler
+## Ordering constraints (from PROJECT_CONTEXT)
 
-_(henüz boş — yeni bir fikir geldiğinde aşağıdaki şablonla ekle)_
+- Local terminal must be stable on hardware before SSH work.
+- ANSI/VT100 screen model before serious SSH usage.
+- Never implement an SSH protocol stack from scratch — reuse PTY + installed `ssh`.
+- iPad1VNC's built-in terminal will only be removed after this app has working SSH (see iPad1VNC `RESPONSIBILITY_AUDIT.md` on its beta4 branch).
 
-## Koddaki TODO / FIXME Notları
+## Unscheduled ideas
 
-_(kodda TODO/FIXME notu bulunamadı)_
+- 256-color / bold / underline attributes after basic colors are stable.
+- Bounded scrollback search.
+- Session logging to `iPad1Files/Documents/` (opt-in, size-capped).
+- `mosh`-style reconnect hints when Wi-Fi drops (UX only, no new protocol).
+- Snippets shared with iPad1VNC profiles (host/user metadata, never passwords).
 
-## Ekleme Şablonu
+## Out of scope
 
-```markdown
-### Başlık
-
-- **Kategori:** yeni özellik / iyileştirme / teknik borç / araştırma
-- **Neden istendi:** kısa gerekçe
-- **Notlar:** büyüklük tahmini, bağımlılıklar, riskler
-```
+Theme system (intentional), file manager features (iPad1Files), FTP/SFTP transfers (iPad1FTPDownloader), VNC (iPad1VNC).
