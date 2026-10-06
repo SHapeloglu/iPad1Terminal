@@ -1,135 +1,135 @@
-# iPad1Terminal — Project Context
+# iPad1Terminal — Proje Bağlamı
 
-## Purpose
+## Amaç
 
-`iPad1Terminal` is a lightweight terminal application for a jailbroken iPad 1.
+`iPad1Terminal`, jailbreak'li bir iPad 1 için hafif bir terminal uygulamasıdır.
 
-The application is intended to provide:
+Uygulamanın sağlaması amaçlananlar:
 
-1. A real local shell on the iPad through a pseudo-terminal (PTY).
-2. SSH access to remote Unix/Linux systems in a later phase.
-3. A terminal UI designed specifically for iPad 1 / iOS 5.1.1 / 256 MB RAM.
+1. Sözde terminal (PTY) üzerinden iPad'de gerçek bir yerel kabuk.
+2. Daha sonraki bir aşamada uzak Unix/Linux sistemlere SSH erişimi.
+3. Özellikle iPad 1 / iOS 5.1.1 / 256 MB RAM için tasarlanmış bir terminal arayüzü.
 
-SSH is a feature of `iPad1Terminal`; it is not a separate application.
+SSH, `iPad1Terminal`'in bir özelliğidir; ayrı bir uygulama değildir.
 
 ---
 
-## Non-negotiable platform constraints
+## Değiştirilemez platform kısıtları
 
-These constraints must never be changed without explicit user approval:
+Bu kısıtlar kullanıcının açık onayı olmadan asla değiştirilmemelidir:
 
-- Device: iPad 1
+- Cihaz: iPad 1
 - iOS: 5.1.1
-- Architecture: armv7
+- Mimari: armv7
 - RAM: 256 MB
-- Jailbreak environment
+- Jailbreak ortamı
 - Theos
 - Objective-C
 - non-ARC / MRC
 - UIKit / Foundation
-- no Swift
-- no modern iOS-only APIs
-- no WebView-based terminal
-- no heavy dependency stack
+- Swift yok
+- yalnızca yeni iOS'ta olan API'ler yok
+- WebView tabanlı terminal yok
+- ağır bağımlılık yığını yok
 
-Current working build target:
+Güncel çalışan derleme hedefi:
 
 ```make
 ARCHS = armv7
 TARGET = iphone:clang:6.1:5.1
 ```
 
-The iPhoneOS9.3 SDK caused linker problems involving simulator `.tbd` files and a missing armv7 `liblaunch.dylib`. The iPhoneOS6.1 SDK is the working SDK for this project.
+iPhoneOS9.3 SDK, simülatör `.tbd` dosyaları ve eksik armv7 `liblaunch.dylib` ile ilgili bağlayıcı sorunlarına yol açtı. Bu projede çalışan SDK iPhoneOS6.1 SDK'dır.
 
 ---
 
-## Repository
+## Repo
 
-GitHub repository:
+GitHub reposu:
 
 ```text
 https://github.com/SHapeloglu/iPad1Terminal
 ```
 
-Default branch:
+Varsayılan dal:
 
 ```text
 main
 ```
 
-At the time this context file was created, the repository existed but was still empty.
+Bu bağlam dosyası oluşturulduğunda repo vardı ama henüz boştu.
 
 ---
 
-## Current development status
+## Güncel geliştirme durumu
 
-Current intended version:
+Hedeflenen güncel sürüm:
 
 ```text
 0.2.1-alpha1
 ```
 
-### Real-device milestone already achieved
+### Gerçek cihazda zaten ulaşılan kilometre taşı
 
-The following has been proven on the real iPad 1:
+Gerçek iPad 1'de kanıtlananlar:
 
-- application installs and launches
-- `Local Terminal` screen opens
-- PTY creation works
-- child shell starts
-- `/bin/sh -i` prompt is visible
-- PTY output reaches the UIKit terminal view
-- local shell is alive on the real device
+- uygulama kuruluyor ve açılıyor
+- `Local Terminal` ekranı açılıyor
+- PTY oluşturma çalışıyor
+- alt kabuk başlıyor
+- `/bin/sh -i` istemi görünüyor
+- PTY çıktısı UIKit terminal görünümüne ulaşıyor
+- yerel kabuk gerçek cihazda çalışıyor
 
-The first screenshot showed:
+İlk ekran görüntüsünde şu vardı:
 
 ```text
 sh-4.0$
 [Ksh-4.0$
 ```
 
-The `[K` text was caused by raw ANSI `ESC[K` sequences being shown instead of interpreted.
+`[K` metni, ham ANSI `ESC[K` dizilerinin yorumlanmak yerine gösterilmesinden kaynaklanıyordu.
 
-### v0.2 changes
+### v0.2 değişiklikleri
 
-v0.2 introduced:
+v0.2 şunları getirdi:
 
-- direct keyboard input into the terminal
-- removal of the visible white command `UITextField`
-- lightweight ANSI filtering
-- suppression of raw `ESC[K` / CSI text
-- basic `ESC[2J` clear-screen handling
-- special terminal key row
-- bounded scrollback
-- UTF-8 output buffering
-- PTY resize with `TIOCSWINSZ`
+- terminale doğrudan klavye girdisi
+- görünür beyaz komut `UITextField`'ının kaldırılması
+- hafif ANSI filtreleme
+- ham `ESC[K` / CSI metninin bastırılması
+- temel `ESC[2J` ekran temizleme
+- özel terminal tuş satırı
+- sınırlı geri kaydırma geçmişi
+- UTF-8 çıktı tamponlama
+- `TIOCSWINSZ` ile PTY yeniden boyutlandırma
 
-### Real-device v0.2 findings
+### Gerçek cihazda v0.2 bulguları
 
-The real-device v0.2 test revealed:
+v0.2 gerçek cihaz testi şunları ortaya çıkardı:
 
-1. Turkish characters could not be typed.
-2. Backspace did not work.
-3. The helper-key row was hidden behind the software keyboard.
+1. Türkçe karakterler yazılamıyordu.
+2. Backspace çalışmıyordu.
+3. Yardımcı tuş satırı yazılım klavyesinin arkasında kalıyordu.
 
-The screenshot confirmed that the shell itself still worked.
+Ekran görüntüsü kabuğun kendisinin hâlâ çalıştığını doğruladı.
 
-### v0.2.1 fixes prepared
+### Hazırlanan v0.2.1 düzeltmeleri
 
-The following fixes were prepared for `0.2.1-alpha1`:
+`0.2.1-alpha1` için hazırlanan düzeltmeler:
 
 - `UIKeyboardTypeASCIICapable` -> `UIKeyboardTypeDefault`
-- Turkish/Unicode input allowed
-- PTY slave `VERASE` explicitly set to `0x7F`
-- Backspace continues to send DEL `0x7F`
-- special terminal helper row moved to `inputAccessoryView`
-- iOS 5 compatibility preserved by not using `UITextView.selectable`
+- Türkçe/Unicode girdiye izin verildi
+- PTY slave `VERASE` açıkça `0x7F` yapıldı
+- Backspace DEL `0x7F` göndermeye devam ediyor
+- özel terminal yardımcı satırı `inputAccessoryView`'a taşındı
+- `UITextView.selectable` kullanılmayarak iOS 5 uyumluluğu korundu
 
-These v0.2.1 input fixes still need final local build/install/device validation unless a later SESSION entry states otherwise.
+Bu v0.2.1 girdi düzeltmeleri, daha sonraki bir SESSION kaydı aksini söylemedikçe hâlâ son yerel derleme/kurulum/cihaz doğrulamasını bekliyor.
 
 ---
 
-## Current architecture
+## Güncel mimari
 
 ```text
 iOS keyboard
@@ -160,17 +160,17 @@ PTY master <--> PTY slave <--> /bin/sh -i
 
 ---
 
-## Important architectural decisions
+## Önemli mimari kararlar
 
-### 1. PTY first
+### 1. Önce PTY
 
-Local terminal must be stable before SSH work begins.
+SSH çalışmasına başlamadan önce yerel terminal kararlı olmalı.
 
-### 2. SSH will reuse the PTY layer
+### 2. SSH PTY katmanını yeniden kullanacak
 
-Do not implement an SSH protocol stack from scratch.
+SSH protokol yığınını sıfırdan yazma.
 
-Preferred future architecture:
+Tercih edilen gelecek mimari:
 
 ```text
 Terminal UI
@@ -185,13 +185,13 @@ installed ssh binary
 remote server
 ```
 
-### 3. ANSI/VT100 before serious SSH usage
+### 3. Ciddi SSH kullanımından önce ANSI/VT100
 
-The current ANSI parser is intentionally incomplete.
+Güncel ANSI ayrıştırıcı bilinçli olarak eksiktir.
 
-It can suppress common raw CSI sequences but it is not yet a real terminal screen model.
+Yaygın ham CSI dizilerini bastırabilir ama henüz gerçek bir terminal ekran modeli değildir.
 
-Before considering the terminal mature enough for:
+Terminali şunlar için yeterince olgun saymadan önce:
 
 ```text
 vim
@@ -201,45 +201,45 @@ htop
 less
 ```
 
-implement a real terminal screen buffer and cursor model.
+gerçek bir terminal ekran tamponu ve imleç modeli yaz.
 
-### 4. Memory must remain bounded
+### 4. Bellek sınırlı kalmalı
 
-iPad 1 has only 256 MB RAM.
+iPad 1'de yalnızca 256 MB RAM var.
 
-Do not allow:
+İzin verme:
 
-- unlimited terminal history
-- unbounded string append
-- huge terminal buffers
-- multiple heavy terminal sessions by default
+- sınırsız terminal geçmişi
+- sınırsız metin ekleme
+- devasa terminal tamponları
+- varsayılan olarak birden fazla ağır terminal oturumu
 
-Current scrollback is bounded.
+Güncel geri kaydırma geçmişi sınırlıdır.
 
-### 5. MRC only
+### 5. Yalnızca MRC
 
-All Objective-C memory ownership must follow manual retain/release rules.
-
----
-
-## Current known limitations
-
-- ANSI/VT100 support is incomplete.
-- Cursor movement is not modeled correctly yet.
-- Full-screen terminal applications are not yet a supported milestone.
-- SSH is not implemented yet.
-- SSH profiles are not implemented yet.
-- SSH keys are not implemented yet.
-- multiple terminal sessions are not implemented.
-- SFTP/SCP UI is not implemented.
-- theme system is intentionally out of scope.
-- Unicode input fix still needs final hardware validation unless later documented.
+Tüm Objective-C bellek sahipliği manuel retain/release kurallarına uymalıdır.
 
 ---
 
-## Product direction
+## Bilinen güncel sınırlamalar
 
-Target experience:
+- ANSI/VT100 desteği eksik.
+- İmleç hareketi henüz doğru modellenmiyor.
+- Tam ekran terminal uygulamaları henüz desteklenen bir kilometre taşı değil.
+- SSH henüz yok.
+- SSH profilleri henüz yok.
+- SSH anahtarları henüz yok.
+- birden fazla terminal oturumu yok.
+- SFTP/SCP arayüzü yok.
+- tema sistemi bilinçli olarak kapsam dışı.
+- Unicode girdi düzeltmesi, daha sonra belgelenmedikçe hâlâ son donanım doğrulamasını bekliyor.
+
+---
+
+## Ürün yönü
+
+Hedef deneyim:
 
 ```text
 MobileTerminal local-shell strength
@@ -253,9 +253,11 @@ iPad1Files integration
 iPad1Terminal
 ```
 
-Do not chase modern terminal feature count.
+(MobileTerminal'in yerel kabuk gücü + Prompt tarzı SSH kullanılabilirliği + iPad 1 / iOS 5.1.1 optimizasyonu + iPad1Files entegrasyonu)
 
-Priorities:
+Güncel terminallerin özellik sayısının peşinden koşma.
+
+Öncelikler:
 
 ```text
 stability
@@ -269,43 +271,43 @@ stability
 
 ---
 
-## Planned v1 capabilities
+## Planlanan v1 yetenekleri
 
-Target v1 scope:
+Hedef v1 kapsamı:
 
-- Local Terminal
-- usable ANSI/VT100 subset
-- UTF-8 / Turkish input and output
-- Esc / Ctrl / Tab / arrows
-- copy/paste
-- bounded scrollback
-- portrait/landscape
+- Yerel Terminal
+- kullanılabilir ANSI/VT100 alt kümesi
+- UTF-8 / Türkçe girdi ve çıktı
+- Esc / Ctrl / Tab / ok tuşları
+- kopyala/yapıştır
+- sınırlı geri kaydırma geçmişi
+- dikey/yatay
 - SSH
-- saved SSH connection profiles
-- SSH key usage
-- quick commands
-- iPad1Files shortcut
+- kayıtlı SSH bağlantı profilleri
+- SSH anahtarı kullanımı
+- hızlı komutlar
+- iPad1Files kısayolu
 
-Out of initial v1 scope unless explicitly approved:
+Açıkça onaylanmadıkça ilk v1 kapsamı dışında:
 
 - Mosh
 - Telnet
-- SFTP GUI
-- multiple concurrent tabs
-- themes
-- graphical system monitor
+- SFTP arayüzü
+- birden fazla eşzamanlı sekme
+- temalar
+- grafik sistem izleyici
 - Web terminal
-- embedded modern SSH crypto library
+- gömülü güncel SSH kripto kütüphanesi
 
 ---
 
-## Immediate next action
+## Hemen yapılacak sonraki adım
 
-Do not begin SSH.
+SSH'e başlama.
 
-First validate the prepared `0.2.1-alpha1` input fixes on the real iPad 1.
+Önce hazırlanan `0.2.1-alpha1` girdi düzeltmelerini gerçek iPad 1'de doğrula.
 
-Build:
+Derleme:
 
 ```bash
 cd ~/projects/iPad1Terminal-v0.2.1-input-fix
@@ -313,21 +315,21 @@ make clean
 make package
 ```
 
-Install the generated package on the iPad at the current LAN address used in this development session.
+Üretilen paketi bu geliştirme oturumunda kullanılan güncel yerel ağ adresindeki iPad'e kur.
 
-Inside **iPad1Terminal -> Local Terminal**, test:
+**iPad1Terminal -> Local Terminal** içinde test et:
 
 ```text
 Türkçe: ğüşiöç İĞÜŞÖÇ
 ```
 
-Before pressing Return:
+Return'e basmadan önce:
 
-- erase several characters with Backspace
-- type them again
-- verify helper keys are visible above the iOS keyboard
+- birkaç karakteri Backspace ile sil
+- tekrar yaz
+- yardımcı tuşların iOS klavyesinin üstünde göründüğünü doğrula
 
-Then validate:
+Ardından doğrula:
 
 ```bash
 pwd
@@ -336,12 +338,12 @@ ls -la
 clear
 ```
 
-Only after these tests pass should the next terminal-engine milestone begin.
+Bir sonraki terminal motoru kilometre taşına ancak bu testler geçtikten sonra başlanmalı.
 
-The next major engine milestone should be:
+Bir sonraki büyük motor kilometre taşı SSH değil, şu olmalı:
 
 ```text
 real ANSI/VT100 screen buffer + cursor model
 ```
 
-not SSH.
+(gerçek ANSI/VT100 ekran tamponu + imleç modeli)

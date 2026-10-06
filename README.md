@@ -1,32 +1,32 @@
 # iPad1Terminal
 
-A lightweight local shell and SSH terminal project for a jailbroken **iPad 1 running iOS 5.1.1**.
+Jailbreak'li **iOS 5.1.1 çalıştıran iPad 1** için hafif bir yerel kabuk ve SSH terminali projesi.
 
-## Status
+## Durum
 
-Current development line:
+Güncel geliştirme hattı:
 
 ```text
 0.2.x alpha
 ```
 
-The Local Terminal PTY and shell have already been demonstrated on real iPad 1 hardware.
+Yerel Terminal PTY'si ve kabuk gerçek iPad 1 donanımında zaten gösterildi.
 
-Current focus is terminal input correctness and ANSI/VT100 behavior before SSH is added.
+SSH eklenmeden önceki güncel odak terminal girdisinin doğruluğu ve ANSI/VT100 davranışıdır.
 
 ---
 
-## Goals
+## Hedefler
 
-- real local terminal
-- PTY-backed shell
-- UTF-8 / Turkish input and output
-- terminal-specific keyboard controls
-- bounded RAM usage
-- usable ANSI/VT100 terminal emulation
-- later SSH support
-- later saved SSH profiles
-- lightweight iPad1Files integration
+- gerçek yerel terminal
+- PTY destekli kabuk
+- UTF-8 / Türkçe girdi ve çıktı
+- terminale özgü klavye kontrolleri
+- sınırlı RAM kullanımı
+- kullanılabilir ANSI/VT100 terminal öykünmesi
+- daha sonra SSH desteği
+- daha sonra kayıtlı SSH profilleri
+- hafif iPad1Files entegrasyonu
 
 ---
 
@@ -44,7 +44,7 @@ MRC / non-ARC
 UIKit / Foundation
 ```
 
-Current build configuration:
+Güncel derleme yapılandırması:
 
 ```make
 ARCHS = armv7
@@ -53,7 +53,7 @@ TARGET = iphone:clang:6.1:5.1
 
 ---
 
-## Current architecture
+## Güncel mimari
 
 ```text
 iOS keyboard
@@ -71,50 +71,48 @@ PTY
 /bin/sh -i
 ```
 
-SSH will later reuse the same terminal presentation layer.
+SSH daha sonra aynı terminal sunum katmanını yeniden kullanacak.
 
 ---
 
-## Current known state
+## Bilinen güncel durum
 
-Working on real hardware:
+Gerçek donanımda çalışanlar:
 
-- app launch
-- Local Terminal launch
-- PTY allocation
+- uygulama açılışı
+- Yerel Terminal'in açılması
+- PTY ayırma
 - `/bin/sh -i`
-- shell prompt
-- terminal output
-- bounded scrollback
-- terminal resize
+- kabuk istemi (prompt)
+- terminal çıktısı
+- sınırlı geri kaydırma geçmişi
+- terminal yeniden boyutlandırma
 
-Recently addressed:
+Yakın zamanda ele alınanlar:
 
-- raw `[K` ANSI artifacts
-- direct terminal keyboard input
-- Turkish keyboard input path
-- Backspace/PTY erase alignment
-- helper key row placement
+- ham `[K` ANSI kalıntıları
+- doğrudan terminal klavye girdisi
+- Türkçe klavye girdi yolu
+- Backspace / PTY silme ayarı uyumu
+- yardımcı tuş satırının yerleşimi
 
-See:
+Belirleyici güncel durum için bkz.:
 
 ```text
 PROJECT_CONTEXT.md
 SESSION.md
 ```
 
-for the authoritative current state.
-
 ---
 
-## Build
+## Derleme
 
 ```bash
 make clean
 make package
 ```
 
-The generated package will be under:
+Üretilen paket şurada olur:
 
 ```text
 packages/
@@ -122,15 +120,15 @@ packages/
 
 ---
 
-## Development rule
+## Geliştirme kuralı
 
-Do not begin SSH until the Local Terminal and ANSI/VT100 milestones are stable on the real iPad 1.
+Yerel Terminal ve ANSI/VT100 kilometre taşları gerçek iPad 1'de kararlı olmadan SSH'e başlama.
 
 ---
 
-## Documentation
+## Dokümantasyon
 
-For a new development chat or contributor, read:
+Yeni bir geliştirme sohbeti veya katkıda bulunan kişi için okuma sırası:
 
 1. `PROJECT_CONTEXT.md`
 2. `SESSION.md`
@@ -140,4 +138,4 @@ For a new development chat or contributor, read:
 6. `INTEGRATION.md`
 7. `AGENTS.md`
 
-The `Immediate next action` section in `SESSION.md` is the correct continuation point.
+Doğru devam noktası `SESSION.md` içindeki "Hemen yapılacak sonraki adım" bölümüdür.

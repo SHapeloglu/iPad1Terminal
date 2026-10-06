@@ -1,22 +1,22 @@
 # BACKLOG.md — iPad1Terminal
 
-Scheduled work: `TASKS.md` phases 0–6 (bootstrap → local PTY → input/UI → ANSI/VT100 screen model → SSH via the installed `ssh` binary under PTY → usability → stability). Context: `PROJECT_CONTEXT.md`.
+Planlı işler: `TASKS.md` aşama 0–6 (başlangıç → yerel PTY → girdi/arayüz → ANSI/VT100 ekran modeli → PTY altında kurulu `ssh` ikilisiyle SSH → kullanılabilirlik → kararlılık). Bağlam: `PROJECT_CONTEXT.md`.
 
-## Ordering constraints (from PROJECT_CONTEXT)
+## Sıralama kısıtları (PROJECT_CONTEXT'ten)
 
-- Local terminal must be stable on hardware before SSH work.
-- ANSI/VT100 screen model before serious SSH usage.
-- Never implement an SSH protocol stack from scratch — reuse PTY + installed `ssh`.
-- iPad1VNC's built-in terminal will only be removed after this app has working SSH (see iPad1VNC `RESPONSIBILITY_AUDIT.md` on its beta4 branch).
+- SSH çalışmasından önce yerel terminal donanımda kararlı olmalı.
+- Ciddi SSH kullanımından önce ANSI/VT100 ekran modeli.
+- SSH protokol yığınını asla sıfırdan yazma — PTY + kurulu `ssh`'i yeniden kullan.
+- iPad1VNC'nin yerleşik terminali ancak bu uygulamada SSH çalışır hale geldikten sonra kaldırılacak (bkz. iPad1VNC beta4 dalındaki `RESPONSIBILITY_AUDIT.md`).
 
-## Unscheduled ideas
+## Planlanmamış fikirler
 
-- 256-color / bold / underline attributes after basic colors are stable.
-- Bounded scrollback search.
-- Session logging to `iPad1Files/Documents/` (opt-in, size-capped).
-- `mosh`-style reconnect hints when Wi-Fi drops (UX only, no new protocol).
-- Snippets shared with iPad1VNC profiles (host/user metadata, never passwords).
+- Temel renkler kararlı olduktan sonra 256 renk / kalın / altı çizili öznitelikler.
+- Sınırlı geri kaydırma geçmişinde arama.
+- `iPad1Files/Documents/` altına oturum günlüğü (isteğe bağlı, boyut sınırlı).
+- Wi-Fi koptuğunda `mosh` tarzı yeniden bağlanma ipuçları (yalnızca deneyim, yeni protokol yok).
+- iPad1VNC profilleriyle paylaşılan kısa komutlar (host/kullanıcı metadata'sı, asla şifre değil).
 
-## Out of scope
+## Kapsam dışı
 
-Theme system (intentional), file manager features (iPad1Files), FTP/SFTP transfers (iPad1FTPDownloader), VNC (iPad1VNC).
+Tema sistemi (bilinçli), dosya yöneticisi özellikleri (iPad1Files), FTP/SFTP transferleri (iPad1FTPDownloader), VNC (iPad1VNC).

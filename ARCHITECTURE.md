@@ -1,22 +1,22 @@
-# ARCHITECTURE
+# MİMARİ
 
-## Overview
+## Genel bakış
 
-`iPad1Terminal` is a native UIKit terminal application designed specifically for a jailbroken iPad 1 running iOS 5.1.1.
+`iPad1Terminal`, özellikle iOS 5.1.1 çalıştıran jailbreak'li bir iPad 1 için tasarlanmış yerel (native) UIKit terminal uygulamasıdır.
 
-The architecture separates:
+Mimari şunları ayırır:
 
-- terminal UI
-- keyboard input
-- ANSI parsing
-- terminal session
-- PTY/process management
+- terminal arayüzü
+- klavye girdisi
+- ANSI ayrıştırma
+- terminal oturumu
+- PTY / süreç yönetimi
 
-SSH will later reuse the same terminal/PTY presentation layer.
+SSH daha sonra aynı terminal/PTY sunum katmanını yeniden kullanacak.
 
 ---
 
-## Platform contract
+## Platform sözleşmesi
 
 ```text
 iPad 1
@@ -29,7 +29,7 @@ non-ARC / MRC
 UIKit / Foundation
 ```
 
-Current working Theos target:
+Güncel çalışan Theos hedefi:
 
 ```make
 ARCHS = armv7
@@ -38,7 +38,7 @@ TARGET = iphone:clang:6.1:5.1
 
 ---
 
-## Current component model
+## Güncel bileşen modeli
 
 ```text
 AppDelegate
@@ -73,68 +73,68 @@ TerminalInputView     TerminalANSIParser
 
 ## AppDelegate
 
-Responsibilities:
+Sorumlulukları:
 
-- create window
-- create navigation controller
-- display `HomeViewController`
+- pencereyi oluşturmak
+- navigation controller oluşturmak
+- `HomeViewController`'ı göstermek
 
-Must remain minimal.
+En küçük haliyle kalmalı.
 
 ---
 
 ## HomeViewController
 
-Current role:
+Güncel rolü:
 
-- show `Local Terminal`
-- later show SSH connection profiles
+- `Local Terminal`'i göstermek
+- daha sonra SSH bağlantı profillerini göstermek
 
-Do not put PTY logic here.
+Buraya PTY mantığı koyma.
 
 ---
 
 ## TerminalViewController
 
-Responsibilities:
+Sorumlulukları:
 
-- terminal display
-- terminal input routing
-- special key handling
-- ANSI output routing
-- scrollback presentation
-- terminal resize calculation
-- session lifecycle coordination
+- terminal görüntüsü
+- terminal girdisini yönlendirme
+- özel tuş işleme
+- ANSI çıktısını yönlendirme
+- geri kaydırma geçmişini gösterme
+- terminal yeniden boyutlandırma hesabı
+- oturum yaşam döngüsü koordinasyonu
 
-Must not implement low-level PTY allocation directly.
+Düşük seviye PTY ayırmayı doğrudan yapmamalı.
 
 ---
 
 ## TerminalInputView
 
-Purpose:
+Amaç:
 
-Provide direct software-keyboard input without a visible white form field.
+Görünür beyaz bir form alanı olmadan doğrudan yazılım klavyesi girdisi sağlamak.
 
-Implements:
+Uyguladığı protokol:
 
 ```objc
 UIKeyInput
 ```
 
-Important decisions:
+Önemli kararlar:
 
-- must be first-responder capable
-- uses `UIKeyboardTypeDefault`
-- must not force ASCII-only keyboard because Turkish input is required
-- `deleteBackward` maps to PTY erase input
-- returns the special terminal helper bar as `inputAccessoryView`
+- first responder olabilmeli
+- `UIKeyboardTypeDefault` kullanır
+- Türkçe girdi gerektiği için yalnız ASCII klavyeyi zorlamamalı
+- `deleteBackward` PTY silme girdisine eşlenir
+- özel terminal yardımcı çubuğunu `inputAccessoryView` olarak döndürür
 
 ---
 
-## Special terminal key row
+## Özel terminal tuş satırı
 
-Target keys:
+Hedef tuşlar:
 
 ```text
 Esc
@@ -148,7 +148,7 @@ Right
 |
 ```
 
-Later enhancements may add:
+Daha sonra eklenebilecekler:
 
 ```text
 Ctrl modifier state
@@ -159,24 +159,24 @@ _
 :
 ```
 
-Do not make the bar heavy or visually complex.
+Çubuğu ağır veya görsel olarak karmaşık yapma.
 
 ---
 
 ## LocalTerminalSession
 
-Responsibilities:
+Sorumlulukları:
 
-- allocate PTY
-- create child process
-- configure slave terminal
-- launch shell
-- read output
-- write input
-- resize terminal
-- terminate child cleanly
+- PTY ayırmak
+- alt süreç oluşturmak
+- slave terminali yapılandırmak
+- kabuğu başlatmak
+- çıktıyı okumak
+- girdiyi yazmak
+- terminali yeniden boyutlandırmak
+- alt süreci temiz şekilde sonlandırmak
 
-Current PTY strategy:
+Güncel PTY stratejisi:
 
 ```text
 posix_openpt
@@ -190,49 +190,49 @@ dup2
 execl
 ```
 
-The implementation intentionally avoids making `forkpty()` a required dependency.
+Uygulama bilinçli olarak `forkpty()`'yi zorunlu bağımlılık yapmaktan kaçınır.
 
 ---
 
 ## PTY termios
 
-Backspace behavior uses:
+Backspace davranışı şunu kullanır:
 
 ```text
 DEL = 0x7F
 ```
 
-The slave PTY is configured with:
+Slave PTY şu şekilde yapılandırılır:
 
 ```c
 tio.c_cc[VERASE] = 0x7F;
 ```
 
-This must match `TerminalInputView` Backspace behavior.
+Bu, `TerminalInputView`'un Backspace davranışıyla eşleşmelidir.
 
 ---
 
-## Shell
+## Kabuk
 
-Current shell launch:
+Güncel kabuk başlatma:
 
 ```text
 /bin/sh -i
 ```
 
-Fallback may attempt:
+Yedek olarak denenebilecek:
 
 ```text
 /bin/bash -i
 ```
 
-Initial working directory:
+Başlangıç çalışma dizini:
 
 ```text
 /var/mobile
 ```
 
-Environment includes:
+Ortam değişkenleri:
 
 ```text
 TERM=vt100
@@ -240,15 +240,15 @@ HOME=/var/mobile
 SHELL=/bin/sh
 ```
 
-Do not assume shell behavior equivalent to modern bash.
+Kabuk davranışının güncel bash ile aynı olduğunu varsayma.
 
 ---
 
-## PTY output thread
+## PTY çıktı iş parçacığı
 
-The main UI thread must never block on PTY reads.
+Ana arayüz iş parçacığı PTY okumalarında asla bloklanmamalıdır.
 
-Current model:
+Güncel model:
 
 ```text
 NSThread
@@ -266,44 +266,44 @@ UTF-8 byte buffering
 performSelectorOnMainThread
 ```
 
-This is intentionally compatible with old iOS.
+Bu bilinçli olarak eski iOS ile uyumludur.
 
 ---
 
-## UTF-8 handling
+## UTF-8 işleme
 
-PTY reads are byte-oriented.
+PTY okumaları bayt odaklıdır.
 
-A multi-byte UTF-8 character can be split between `read()` calls.
+Çok baytlı bir UTF-8 karakteri iki `read()` çağrısı arasında bölünebilir.
 
-The session therefore retains incomplete UTF-8 tail bytes and joins them with the next read.
+Bu yüzden oturum tamamlanmamış UTF-8 kuyruk baytlarını tutar ve bir sonraki okumayla birleştirir.
 
-Buffers must remain bounded.
+Tamponlar sınırlı kalmalıdır.
 
 ---
 
 ## TerminalANSIParser
 
-Current parser is an interim compatibility layer, not a full terminal emulator.
+Güncel ayrıştırıcı tam bir terminal öykünücüsü değil, geçici bir uyumluluk katmanıdır.
 
-Current responsibilities:
+Güncel sorumlulukları:
 
-- prevent raw `ESC[K` text from appearing
-- consume common CSI sequences
-- detect basic clear-screen sequences
-- consume SGR codes rather than print them literally
+- ham `ESC[K` metninin görünmesini engellemek
+- yaygın CSI dizilerini tüketmek
+- temel ekran temizleme dizilerini algılamak
+- SGR kodlarını harfiyen basmak yerine tüketmek
 
-Current non-goal:
+Güncel hedef dışı:
 
-- accurate cursor/state rendering
+- doğru imleç/durum görüntüleme
 
 ---
 
-## Required next architecture: terminal screen buffer
+## Gereken sonraki mimari: terminal ekran tamponu
 
-The next major terminal-engine phase should add a real screen model.
+Bir sonraki büyük terminal motoru aşaması gerçek bir ekran modeli eklemelidir.
 
-Suggested future classes:
+Önerilen gelecekteki sınıflar:
 
 ```text
 TerminalScreen
@@ -313,7 +313,7 @@ TerminalANSIParser
 TerminalRenderer
 ```
 
-Possible conceptual model:
+Olası kavramsal model:
 
 ```text
 PTY bytes
@@ -332,29 +332,29 @@ TerminalScreen [rows x columns]
 UIKit renderer
 ```
 
-The screen buffer must be fixed-size or tightly bounded.
+Ekran tamponu sabit boyutlu veya sıkı şekilde sınırlı olmalıdır.
 
 ---
 
-## ANSI/VT100 target subset
+## ANSI/VT100 hedef alt kümesi
 
-Before SSH is considered mature, support at least:
+SSH olgun sayılmadan önce en az şunlar desteklenmeli:
 
 - CR
 - LF
 - BS
 - TAB
-- cursor up/down/left/right
-- cursor position
-- erase in line
-- erase in display
-- clear screen
-- save/restore cursor
-- basic SGR reset
-- basic foreground colors
-- terminal resize
+- imleç yukarı/aşağı/sol/sağ
+- imleç konumu
+- satırda silme
+- ekranda silme
+- ekranı temizleme
+- imleci kaydet/geri yükle
+- temel SGR sıfırlama
+- temel ön plan renkleri
+- terminal yeniden boyutlandırma
 
-Acceptance should eventually include:
+Kabul ölçütü zamanla şunları içermeli:
 
 ```text
 clear
@@ -363,13 +363,13 @@ nano
 top
 ```
 
-`vim` can follow once the basic model is stable.
+Temel model kararlı olunca `vim` gelebilir.
 
 ---
 
-## SSH architecture
+## SSH mimarisi
 
-Future target:
+Gelecek hedef:
 
 ```text
 TerminalViewController
@@ -387,15 +387,15 @@ installed ssh executable
 remote host
 ```
 
-Do not duplicate terminal rendering for SSH.
+SSH için terminal görüntülemeyi çoğaltma.
 
-Local and SSH sessions should share the same terminal UI.
+Yerel ve SSH oturumları aynı terminal arayüzünü paylaşmalıdır.
 
 ---
 
-## SSH profile model
+## SSH profil modeli
 
-Future fields:
+Gelecekteki alanlar:
 
 ```text
 Name
@@ -406,84 +406,86 @@ Authentication mode
 Optional identity file
 ```
 
-Passwords must not be stored in plaintext plist files.
+(Ad, Host, Port, Kullanıcı adı, Kimlik doğrulama modu, İsteğe bağlı kimlik dosyası)
 
-Initial SSH version may simply let the `ssh` process display its own password prompt.
+Şifreler düz metin plist dosyalarında saklanmamalıdır.
+
+İlk SSH sürümü, şifre istemini doğrudan `ssh` sürecinin göstermesine izin verebilir.
 
 ---
 
-## iPad1Files integration
+## iPad1Files entegrasyonu
 
-Future lightweight integration:
+Gelecekteki hafif entegrasyon:
 
 ```text
 /var/mobile/Media/iPad1Files/
 ```
 
-Possible quick shortcut:
+Olası hızlı kısayol:
 
 ```text
 Files
 ```
 
-which sends:
+bu şunu gönderir:
 
 ```bash
 cd /var/mobile/Media/iPad1Files/
 ```
 
-Do not copy iPad1Files source code into this project.
+iPad1Files kaynak kodunu bu projeye kopyalama.
 
 ---
 
-## Memory policy
+## Bellek politikası
 
-Device RAM:
+Cihaz RAM'i:
 
 ```text
 256 MB
 ```
 
-Rules:
+Kurallar:
 
-- bounded scrollback
-- fixed/bounded screen buffer
-- fixed PTY read buffer
-- no unlimited history
-- no WebView terminal
-- no large image assets
-- avoid multiple active sessions initially
-- drain autorelease pools in long-running background loops
-
----
-
-## Lifecycle
-
-When terminal screen closes:
-
-- disconnect delegate
-- terminate child if required
-- close PTY descriptor
-- call `waitpid`
-- avoid zombie processes
-
-Background persistence is not a v1 requirement.
+- sınırlı geri kaydırma geçmişi
+- sabit/sınırlı ekran tamponu
+- sabit PTY okuma tamponu
+- sınırsız geçmiş yok
+- WebView terminal yok
+- büyük görsel varlıklar yok
+- başlangıçta birden fazla aktif oturumdan kaçın
+- uzun süren arka plan döngülerinde autorelease pool'ları boşalt
 
 ---
 
-## Security
+## Yaşam döngüsü
 
-Never log:
+Terminal ekranı kapanınca:
 
-- passwords
-- private keys
-- sensitive terminal input
+- delegate bağlantısını kes
+- gerekiyorsa alt süreci sonlandır
+- PTY tanımlayıcısını kapat
+- `waitpid` çağır
+- zombi süreçlerden kaçın
 
-SSH private keys should remain files with appropriate permissions.
+Arka planda kalıcılık v1 gereksinimi değildir.
 
 ---
 
-## Architectural priorities
+## Güvenlik
+
+Asla günlüğe yazma:
+
+- şifreler
+- özel anahtarlar
+- hassas terminal girdisi
+
+SSH özel anahtarları uygun izinlerle dosya olarak kalmalıdır.
+
+---
+
+## Mimari öncelikler
 
 ```text
 correctness
@@ -494,4 +496,6 @@ testability
 usability
 ```
 
-Avoid modern abstractions that reduce iOS 5 compatibility.
+(doğruluk → uyumluluk → sınırlı bellek → basit sahiplik → test edilebilirlik → kullanılabilirlik)
+
+iOS 5 uyumluluğunu azaltan güncel soyutlamalardan kaçın.

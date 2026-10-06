@@ -1,75 +1,79 @@
-# INTEGRATION
+# ENTEGRASYON
 
-## Purpose
+## Amaç
 
-This document defines how `iPad1Terminal` may interact with the other iPad 1 applications without violating responsibility boundaries.
+Bu doküman, `iPad1Terminal`'in sorumluluk sınırlarını ihlal etmeden diğer iPad 1 uygulamalarıyla nasıl etkileşebileceğini tanımlar.
 
 ---
 
-## Application responsibility
+## Uygulama sorumluluğu
 
 ```text
 iPad1Terminal
 = local shell + terminal emulation + SSH
 ```
 
-It is not:
+(yerel kabuk + terminal öykünmesi + SSH)
 
-- a file manager
-- a VNC client
-- a PDF reader
-- an FTP download engine
+Şunlar değildir:
+
+- dosya yöneticisi
+- VNC istemcisi
+- PDF okuyucu
+- FTP indirme motoru
 
 ---
 
 ## iPad1Files
 
-Canonical shared files root:
+Standart ortak dosya kökü:
 
 ```text
 /var/mobile/Media/iPad1Files/
 ```
 
-Potential terminal integration:
+Olası terminal entegrasyonu:
 
-### Quick directory shortcut
+### Hızlı dizin kısayolu
 
-A `Files` quick command may send:
+Bir `Files` hızlı komutu şunu gönderebilir:
 
 ```bash
 cd /var/mobile/Media/iPad1Files/
 ```
 
-This is preferred over copying or embedding iPad1Files logic.
+Bu, iPad1Files mantığını kopyalamaya veya gömmeye tercih edilir.
 
-### Open terminal in directory
+### Terminali bir dizinde açma
 
-Future optional URL scheme could allow iPad1Files to request:
+İleride isteğe bağlı bir URL scheme, iPad1Files'ın şunu istemesine izin verebilir:
 
 ```text
 Open iPad1Terminal at a selected directory
 ```
 
-Example conceptual scheme:
+(iPad1Terminal'i seçilen dizinde aç)
+
+Kavramsal örnek scheme:
 
 ```text
 ipad1terminal://local?cwd=/var/mobile/Media/iPad1Files/Documents/
 ```
 
-Do not implement until the Local Terminal lifecycle and URL parsing are stable.
+Yerel Terminal yaşam döngüsü ve URL ayrıştırma kararlı olmadan yazma.
 
-Security rule:
+Güvenlik kuralı:
 
-- validate path
-- never silently execute arbitrary command text passed by another application
+- yolu doğrula
+- başka bir uygulamanın gönderdiği keyfi komut metnini asla sessizce çalıştırma
 
-Only a directory path should be accepted for this use case.
+Bu kullanım için yalnızca dizin yolu kabul edilmelidir.
 
 ---
 
 ## iPad1VNC
 
-Responsibility separation:
+Sorumluluk ayrımı:
 
 ```text
 iPad1Terminal
@@ -79,43 +83,45 @@ iPad1VNC
 = graphical remote desktop
 ```
 
-Do not add remote desktop features to the terminal.
+(iPad1Terminal: komut satırı / PTY / SSH · iPad1VNC: grafik uzak masaüstü)
+
+Terminale uzak masaüstü özellikleri ekleme.
 
 ---
 
 ## iPad1FTPDownloader
 
-FTPDownloader remains responsible for network file downloading.
+Ağ üzerinden dosya indirme FTPDownloader'ın sorumluluğunda kalır.
 
-`iPad1Terminal` should not become another FTP downloader.
+`iPad1Terminal` ikinci bir FTP indiriciye dönüşmemelidir.
 
-If command-line `ftp`, `scp`, or similar tools are installed on the jailbroken device, users may run them manually in the terminal. That does not change application ownership.
+Jailbreak'li cihazda komut satırı `ftp`, `scp` veya benzeri araçlar kuruluysa kullanıcılar bunları terminalde elle çalıştırabilir. Bu uygulama sahipliğini değiştirmez.
 
 ---
 
 ## iPad1PDFReader
 
-No direct dependency is required.
+Doğrudan bağımlılık gerekmez.
 
-A user may operate on files under the shared root through normal shell commands.
+Kullanıcı ortak kök altındaki dosyalar üzerinde normal kabuk komutlarıyla işlem yapabilir.
 
-Do not embed PDF rendering.
-
----
-
-## Future SSH/SCP behavior
-
-SSH is part of this application.
-
-SCP/SFTP graphical file management is not required for initial v1.
-
-If later added, prefer routing destination selection through iPad1Files rather than creating a second general-purpose file browser.
+PDF görüntüleme gömme.
 
 ---
 
-## URL scheme safety
+## Gelecekteki SSH/SCP davranışı
 
-Potential future schemes:
+SSH bu uygulamanın parçasıdır.
+
+İlk v1 için SCP/SFTP grafik dosya yönetimi gerekli değildir.
+
+İleride eklenirse ikinci bir genel amaçlı dosya gezgini yazmak yerine hedef seçimini iPad1Files üzerinden yönlendirmeyi tercih et.
+
+---
+
+## URL scheme güvenliği
+
+Gelecekte olası scheme'ler:
 
 ```text
 ipad1terminal://local
@@ -123,34 +129,34 @@ ipad1terminal://local?cwd=...
 ipad1terminal://ssh?profile=...
 ```
 
-Do not support:
+Desteklenmeyecekler:
 
 ```text
 ?command=rm ...
 ```
 
-or arbitrary external command execution by URL scheme.
+veya URL scheme ile keyfi harici komut çalıştırma.
 
-This avoids making the app an accidental command-execution vector.
+Bu, uygulamanın kazara bir komut çalıştırma aracına dönüşmesini önler.
 
 ---
 
-## Shared code policy
+## Ortak kod politikası
 
-Do not copy major code from:
+Şunlardan büyük kod parçaları kopyalama:
 
 - iPad1Files
 - iPad1VNC
 - iPad1FTPDownloader
 - iPad1PDFReader
 
-Use small public integration contracts instead.
+Bunun yerine küçük, açık entegrasyon sözleşmeleri kullan.
 
 ---
 
-## Shared platform policy
+## Ortak platform politikası
 
-All iPad 1 family applications continue to target:
+Tüm iPad 1 ailesi uygulamaları şunları hedeflemeye devam eder:
 
 ```text
 iPad 1
@@ -161,4 +167,4 @@ non-ARC / MRC
 Theos
 ```
 
-Each project must still be independently buildable.
+Her proje yine de bağımsız olarak derlenebilir olmalıdır.

@@ -1,8 +1,8 @@
-# TESTING
+# TEST
 
-## Test environment
+## Test ortamı
 
-Primary device:
+Birincil cihaz:
 
 ```text
 iPad 1
@@ -12,7 +12,7 @@ jailbreak
 256 MB RAM
 ```
 
-Build environment:
+Derleme ortamı:
 
 ```text
 Theos
@@ -23,58 +23,58 @@ Objective-C MRC
 
 ---
 
-## 1. Build test
+## 1. Derleme testi
 
-Run:
+Çalıştır:
 
 ```bash
 make clean
 make package
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- no compilation error
-- no armv7 linker error
-- `.deb` generated
-- warning about iOS 5.1 deprecation is acceptable
-- simulator `.tbd` linker warnings must not appear when using the working 6.1 SDK
-
----
-
-## 2. Installation test
-
-Install generated package with the normal jailbreak deployment workflow.
-
-Pass criteria:
-
-- `dpkg -i` succeeds
-- icon appears after `uicache` / SpringBoard refresh
-- app launches
+- derleme hatası yok
+- armv7 bağlayıcı hatası yok
+- `.deb` üretildi
+- iOS 5.1'in kullanımdan kalktığı uyarısı kabul edilebilir
+- çalışan 6.1 SDK kullanılırken simülatör `.tbd` bağlayıcı uyarıları görünmemeli
 
 ---
 
-## 3. Local Terminal launch
+## 2. Kurulum testi
 
-Open:
+Üretilen paketi normal jailbreak dağıtım akışıyla kur.
+
+Geçme ölçütleri:
+
+- `dpkg -i` başarılı
+- `uicache` / SpringBoard yenilemesinden sonra simge görünüyor
+- uygulama açılıyor
+
+---
+
+## 3. Yerel Terminal'in açılması
+
+Aç:
 
 ```text
 iPad1Terminal
 -> Local Terminal
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- black terminal screen appears
-- shell prompt appears
-- no `[PTY ERROR]`
-- app does not crash
+- siyah terminal ekranı görünüyor
+- kabuk istemi görünüyor
+- `[PTY ERROR]` yok
+- uygulama çökmüyor
 
 ---
 
-## 4. Basic shell commands
+## 4. Temel kabuk komutları
 
-Inside **iPad1Terminal itself**, not the external SSH shell, run:
+Harici SSH kabuğunda değil, **iPad1Terminal'in kendisinde** çalıştır:
 
 ```bash
 pwd
@@ -87,64 +87,64 @@ ps
 echo hello
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- commands execute
-- output is visible
-- UI does not freeze
+- komutlar çalışıyor
+- çıktı görünüyor
+- arayüz donmuyor
 
-Expected initial directory:
+Beklenen başlangıç dizini:
 
 ```text
 /var/mobile
 ```
 
-Actual process user must be recorded from device output.
+Gerçek süreç kullanıcısı cihaz çıktısından kaydedilmeli.
 
 ---
 
-## 5. Turkish / UTF-8 input
+## 5. Türkçe / UTF-8 girdi
 
-Inside iPad1Terminal type:
+iPad1Terminal içinde yaz:
 
 ```text
 Türkçe: ğüşiöç İĞÜŞÖÇ
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- Turkish keyboard can produce all characters
-- typed text reaches the shell
-- displayed text is not corrupted
+- Türkçe klavye tüm karakterleri üretebiliyor
+- yazılan metin kabuğa ulaşıyor
+- görüntülenen metin bozulmuyor
 
-Also run:
+Ayrıca çalıştır:
 
 ```bash
 echo "Türkçe: ğüşiöç İĞÜŞÖÇ"
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- UTF-8 output is correct
+- UTF-8 çıktısı doğru
 
 ---
 
 ## 6. Backspace
 
-Before pressing Enter:
+Enter'a basmadan önce:
 
-1. type `abcdef`
-2. press Backspace three times
-3. type `XYZ`
-4. press Enter
+1. `abcdef` yaz
+2. Backspace'e üç kez bas
+3. `XYZ` yaz
+4. Enter'a bas
 
-Pass criteria:
+Geçme ölçütleri:
 
-- shell command line visibly erases characters
-- no `^?` or strange delete glyphs
-- expected edited input reaches shell
+- kabuk komut satırı karakterleri görünür şekilde siliyor
+- `^?` veya tuhaf silme işaretleri yok
+- beklenen düzenlenmiş girdi kabuğa ulaşıyor
 
-If Backspace fails, verify:
+Backspace çalışmazsa doğrula:
 
 ```text
 TerminalInputView sends 0x7F
@@ -155,24 +155,24 @@ PTY VERASE is 0x7F
 
 ## 7. Enter
 
-Type:
+Yaz:
 
 ```text
 echo test
 ```
 
-Press Return.
+Return'e bas.
 
-Pass criteria:
+Geçme ölçütleri:
 
-- command executes exactly once
-- shell returns prompt
+- komut tam olarak bir kez çalışıyor
+- kabuk istemine dönüyor
 
 ---
 
-## 8. Special helper row
+## 8. Özel yardımcı satır
 
-When the software keyboard is visible, verify a row above it containing:
+Yazılım klavyesi görünürken üstünde şunları içeren bir satır olduğunu doğrula:
 
 ```text
 Esc
@@ -186,47 +186,47 @@ v
 |
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- row is above keyboard
-- labels are readable
-- row is tappable
+- satır klavyenin üstünde
+- etiketler okunabilir
+- satıra dokunulabiliyor
 
 ---
 
 ## 9. Ctrl+C
 
-Run a command that waits or runs continuously if available.
+Varsa bekleyen veya sürekli çalışan bir komut çalıştır.
 
-Then tap:
+Sonra dokun:
 
 ```text
 Ctrl+C
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- process is interrupted
-- shell prompt returns
+- süreç kesiliyor
+- kabuk istemi geri geliyor
 
 ---
 
 ## 10. Tab
 
-Type part of a path/command and tap Tab.
+Bir yolun/komutun bir kısmını yaz ve Tab'a dokun.
 
-Pass criteria:
+Geçme ölçütleri:
 
-- Tab reaches the shell
-- shell behavior is consistent with installed shell capabilities
+- Tab kabuğa ulaşıyor
+- kabuk davranışı kurulu kabuğun yetenekleriyle tutarlı
 
-Do not assume `/bin/sh` supports rich completion.
+`/bin/sh`'in zengin tamamlama desteklediğini varsayma.
 
 ---
 
-## 11. Arrow keys
+## 11. Ok tuşları
 
-Test:
+Test et:
 
 ```text
 Up
@@ -235,160 +235,160 @@ Left
 Right
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- sequences reach shell
-- no raw `[A`, `[B`, `[C`, `[D` should appear as ordinary text in the final terminal architecture
+- diziler kabuğa ulaşıyor
+- son terminal mimarisinde ham `[A`, `[B`, `[C`, `[D` sıradan metin olarak görünmemeli
 
-Note:
+Not:
 
-plain `/bin/sh` may not provide bash-style history behavior. Distinguish shell limitations from terminal bugs.
+düz `/bin/sh` bash tarzı geçmiş davranışı sağlamayabilir. Kabuk sınırlamalarını terminal hatalarından ayır.
 
 ---
 
-## 12. ANSI artifact regression
+## 12. ANSI kalıntı regresyonu
 
-Pass criteria:
+Geçme ölçütleri:
 
-The prompt must not visibly show:
+Sıradan kabuk kullanımı sırasında istemde şu görünmemeli:
 
 ```text
 [K
 ```
 
-or other raw CSI fragments during ordinary shell use.
+veya diğer ham CSI parçaları.
 
 ---
 
 ## 13. Clear
 
-Run:
+Çalıştır:
 
 ```bash
 clear
 ```
 
-Pass criteria for current basic parser:
+Güncel temel ayrıştırıcı için geçme ölçütleri:
 
-- raw escape sequences are not shown
-- screen is cleared or acceptably reset
+- ham kaçış dizileri görünmüyor
+- ekran temizleniyor veya kabul edilebilir şekilde sıfırlanıyor
 
-After full screen-buffer implementation:
+Tam ekran tamponu yazıldıktan sonra:
 
-- cursor must be at correct logical position
-- old screen content must be removed correctly
+- imleç doğru mantıksal konumda olmalı
+- eski ekran içeriği doğru şekilde kaldırılmalı
 
 ---
 
-## 14. ANSI SGR test
+## 14. ANSI SGR testi
 
-Run:
+Çalıştır:
 
 ```bash
 printf '\033[31mRED\033[0m\n'
 ```
 
-Current interim parser pass criteria:
+Güncel geçici ayrıştırıcı için geçme ölçütleri:
 
-- raw `ESC[31m` / `ESC[0m` text is not displayed
+- ham `ESC[31m` / `ESC[0m` metni görüntülenmiyor
 
-Future screen-buffer pass criteria:
+Gelecekteki ekran tamponu için geçme ölçütleri:
 
-- `RED` is rendered using the supported basic foreground color
-- following text returns to default attributes
+- `RED` desteklenen temel ön plan rengiyle görüntüleniyor
+- sonraki metin varsayılan özniteliklere dönüyor
 
 ---
 
-## 15. Scrollback
+## 15. Geri kaydırma geçmişi
 
-Generate large output with commands available on the device.
+Cihazda bulunan komutlarla büyük çıktı üret.
 
-Examples:
+Örnekler:
 
 ```bash
 find /usr 2>/dev/null
 ```
 
-or if available:
+veya varsa:
 
 ```bash
 seq 1 5000
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- app remains responsive
-- history does not grow without limit
-- no crash
-- no obvious runaway memory growth
-
----
-
-## 16. Rotation
-
-Test:
-
-- portrait
-- landscape
-- portrait again
-
-Pass criteria:
-
-- session remains alive
-- shell does not restart
-- terminal size is updated
-- no overlap with keyboard/helper row
+- uygulama yanıt vermeye devam ediyor
+- geçmiş sınırsız büyümüyor
+- çökme yok
+- belirgin kontrolsüz bellek artışı yok
 
 ---
 
-## 17. Repeated open/close
+## 16. Döndürme
 
-Open and leave Local Terminal at least 10 times.
+Test et:
 
-Pass criteria:
+- dikey
+- yatay
+- tekrar dikey
 
-- no crash
-- no orphan child shells
-- no zombie processes
-- no PTY fd leak
+Geçme ölçütleri:
 
-Use external SSH only to inspect system process state if necessary.
+- oturum canlı kalıyor
+- kabuk yeniden başlamıyor
+- terminal boyutu güncelleniyor
+- klavye/yardımcı satırla çakışma yok
 
 ---
 
-## 18. Child exit
+## 17. Tekrarlı aç/kapat
 
-Inside Local Terminal run:
+Yerel Terminal'i en az 10 kez aç ve çık.
+
+Geçme ölçütleri:
+
+- çökme yok
+- sahipsiz alt kabuk yok
+- zombi süreç yok
+- PTY dosya tanımlayıcı sızıntısı yok
+
+Gerekirse sistem süreç durumunu incelemek için yalnızca harici SSH kullan.
+
+---
+
+## 18. Alt sürecin çıkışı
+
+Yerel Terminal içinde çalıştır:
 
 ```bash
 exit
 ```
 
-Pass criteria:
+Geçme ölçütleri:
 
-- child process ends
-- UI reports process exit
-- app itself does not crash
-
----
-
-## 19. Memory pressure
-
-During long output:
-
-- observe app stability
-- trigger normal device memory pressure through realistic usage
-
-Pass criteria:
-
-- bounded scrollback remains effective
-- app does not allocate unbounded buffers
+- alt süreç sonlanıyor
+- arayüz süreç çıkışını bildiriyor
+- uygulamanın kendisi çökmüyor
 
 ---
 
-## 20. Future ANSI/VT100 acceptance
+## 19. Bellek baskısı
 
-After screen-buffer implementation, test:
+Uzun çıktı sırasında:
+
+- uygulama kararlılığını gözlemle
+- gerçekçi kullanımla normal cihaz bellek baskısı oluştur
+
+Geçme ölçütleri:
+
+- sınırlı geri kaydırma geçmişi etkili kalıyor
+- uygulama sınırsız tampon ayırmıyor
+
+---
+
+## 20. Gelecekteki ANSI/VT100 kabulü
+
+Ekran tamponu yazıldıktan sonra test et:
 
 ```text
 less
@@ -397,52 +397,52 @@ top
 vim
 ```
 
-Minimum acceptance before SSH milestone:
+SSH kilometre taşından önce en az kabul:
 
-- `less` usable
-- `nano` usable enough to navigate/edit
-- `top` redraws without accumulating garbage
-- cursor movement works
-- clear/erase behavior works
-
----
-
-## 21. Future SSH tests
-
-Only after SSH is implemented.
-
-Test:
-
-- valid host
-- invalid host
-- wrong port
-- host key prompt
-- password prompt
-- authentication failure
-- successful login
-- disconnect
-- reconnect
-- server closes connection
-- SSH key
-- legacy algorithm failure if encountered
-
-Never store or publish test passwords/private keys.
+- `less` kullanılabilir
+- `nano` gezinme/düzenleme için yeterince kullanılabilir
+- `top` çöp biriktirmeden yeniden çiziyor
+- imleç hareketi çalışıyor
+- temizleme/silme davranışı çalışıyor
 
 ---
 
-## 22. Regression checklist
+## 21. Gelecekteki SSH testleri
 
-Before any release:
+Yalnızca SSH yazıldıktan sonra.
 
-- [ ] Local shell opens
-- [ ] typing works
-- [ ] Turkish input works
-- [ ] Backspace works
-- [ ] Enter works
-- [ ] Ctrl+C works
-- [ ] helper row visible
-- [ ] no `[K`
-- [ ] rotation works
-- [ ] clear works
-- [ ] bounded memory behavior
-- [ ] close/reopen stability
+Test et:
+
+- geçerli host
+- geçersiz host
+- yanlış port
+- host anahtarı istemi
+- şifre istemi
+- kimlik doğrulama hatası
+- başarılı giriş
+- bağlantıyı kesme
+- yeniden bağlanma
+- sunucunun bağlantıyı kapatması
+- SSH anahtarı
+- karşılaşılırsa eski algoritma hatası
+
+Test şifrelerini/özel anahtarlarını asla saklama veya yayımlama.
+
+---
+
+## 22. Regresyon kontrol listesi
+
+Her sürümden önce:
+
+- [ ] Yerel kabuk açılıyor
+- [ ] yazma çalışıyor
+- [ ] Türkçe girdi çalışıyor
+- [ ] Backspace çalışıyor
+- [ ] Enter çalışıyor
+- [ ] Ctrl+C çalışıyor
+- [ ] yardımcı satır görünüyor
+- [ ] `[K` yok
+- [ ] döndürme çalışıyor
+- [ ] clear çalışıyor
+- [ ] sınırlı bellek davranışı
+- [ ] kapat/yeniden aç kararlılığı

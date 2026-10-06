@@ -1,174 +1,174 @@
-# TASKS
+# GÖREVLER
 
-## Phase 0 — Project bootstrap
+## Aşama 0 — Proje başlangıcı
 
-- [x] Create Theos application skeleton
-- [x] Target iPad
+- [x] Theos uygulama iskeletini oluştur
+- [x] Hedef iPad
 - [x] armv7
-- [x] iOS 5.1 deployment target
+- [x] iOS 5.1 dağıtım hedefi
 - [x] non-ARC / MRC
-- [x] Home screen
-- [x] Local Terminal navigation
+- [x] Ana ekran
+- [x] Yerel Terminal'e gezinme
 
 ---
 
-## Phase 1 — Local PTY
+## Aşama 1 — Yerel PTY
 
-- [x] PTY master allocation
+- [x] PTY master ayırma
 - [x] `grantpt`
 - [x] `unlockpt`
 - [x] `ptsname`
 - [x] `fork`
 - [x] `setsid`
-- [x] PTY slave open
+- [x] PTY slave açma
 - [x] `dup2` stdin/stdout/stderr
 - [x] `/bin/sh -i`
-- [x] initial `chdir("/var/mobile")`
-- [x] background PTY reading
-- [x] PTY writing
-- [x] process cleanup
+- [x] başlangıç `chdir("/var/mobile")`
+- [x] arka planda PTY okuma
+- [x] PTY yazma
+- [x] süreç temizliği
 - [x] `TIOCSWINSZ`
-- [x] real-device shell prompt verified
+- [x] gerçek cihazda kabuk istemi doğrulandı
 
 ---
 
-## Phase 2 — Basic terminal input/UI
+## Aşama 2 — Temel terminal girdisi/arayüzü
 
-- [x] remove visible white command field
-- [x] direct keyboard capture
+- [x] görünür beyaz komut alanını kaldır
+- [x] doğrudan klavye yakalama
 - [x] Enter -> PTY
 - [x] Esc
 - [x] Ctrl+C
 - [x] Tab
-- [x] arrow keys
+- [x] ok tuşları
 - [x] `~`
 - [x] `|`
-- [x] bounded scrollback
-- [x] clear button
-- [x] helper key bar
-- [x] iOS 5 `UITextView.selectable` incompatibility removed
-- [x] Unicode-capable keyboard fix prepared
-- [x] PTY `VERASE` fix prepared
-- [x] helper row `inputAccessoryView` fix prepared
-- [ ] validate Turkish input on real device
-- [ ] validate Backspace on real device
-- [ ] validate helper key row above keyboard on real device
-- [ ] validate rotation after v0.2.1 input changes
-- [ ] add A-/A+ font controls
-- [ ] polish copy/paste
-- [ ] implement reusable Ctrl modifier state
+- [x] sınırlı geri kaydırma geçmişi
+- [x] temizle düğmesi
+- [x] yardımcı tuş çubuğu
+- [x] iOS 5'teki `UITextView.selectable` uyumsuzluğu kaldırıldı
+- [x] Unicode destekli klavye düzeltmesi hazırlandı
+- [x] PTY `VERASE` düzeltmesi hazırlandı
+- [x] yardımcı satır `inputAccessoryView` düzeltmesi hazırlandı
+- [ ] gerçek cihazda Türkçe girdiyi doğrula
+- [ ] gerçek cihazda Backspace'i doğrula
+- [ ] gerçek cihazda yardımcı tuş satırının klavyenin üstünde olduğunu doğrula
+- [ ] v0.2.1 girdi değişikliklerinden sonra döndürmeyi doğrula
+- [ ] A-/A+ yazı boyutu kontrolleri ekle
+- [ ] kopyala/yapıştırı iyileştir
+- [ ] yeniden kullanılabilir Ctrl tuşu durumu yaz
 
 ---
 
-## Phase 3 — ANSI/VT100 screen model
+## Aşama 3 — ANSI/VT100 ekran modeli
 
-### Parser
+### Ayrıştırıcı
 
-- [x] suppress raw `ESC[K`
-- [x] consume common CSI sequences
-- [x] basic `ESC[2J` detection
-- [x] consume SGR rather than print raw codes
-- [ ] parser state machine for split escape sequences
-- [ ] numeric CSI parameters
-- [ ] multiple CSI parameters
-- [ ] private-mode handling where required
+- [x] ham `ESC[K`'yi bastır
+- [x] yaygın CSI dizilerini tüket
+- [x] temel `ESC[2J` algılama
+- [x] ham kodları basmak yerine SGR'yi tüket
+- [ ] bölünmüş kaçış dizileri için ayrıştırıcı durum makinesi
+- [ ] sayısal CSI parametreleri
+- [ ] çoklu CSI parametreleri
+- [ ] gereken yerlerde özel mod işleme
 
-### Screen buffer
+### Ekran tamponu
 
-- [ ] create fixed row/column screen model
-- [ ] create cursor row/column
-- [ ] printable character insertion
+- [ ] sabit satır/sütun ekran modeli oluştur
+- [ ] imleç satır/sütunu oluştur
+- [ ] yazdırılabilir karakter ekleme
 - [ ] CR
 - [ ] LF
 - [ ] BS
 - [ ] TAB
-- [ ] cursor up
-- [ ] cursor down
-- [ ] cursor left
-- [ ] cursor right
-- [ ] cursor absolute position
-- [ ] erase in line
-- [ ] erase in display
-- [ ] clear screen
-- [ ] scroll region or minimum scrolling behavior
-- [ ] save cursor
-- [ ] restore cursor
-- [ ] basic attributes
-- [ ] basic foreground colors
+- [ ] imleç yukarı
+- [ ] imleç aşağı
+- [ ] imleç sola
+- [ ] imleç sağa
+- [ ] imleç mutlak konumu
+- [ ] satırda silme
+- [ ] ekranda silme
+- [ ] ekranı temizle
+- [ ] kaydırma bölgesi veya en az kaydırma davranışı
+- [ ] imleci kaydet
+- [ ] imleci geri yükle
+- [ ] temel öznitelikler
+- [ ] temel ön plan renkleri
 
-### Renderer
+### Görüntüleyici
 
-- [ ] render screen model efficiently
-- [ ] avoid full giant-string rebuild on every byte
-- [ ] maintain fixed memory usage
-- [ ] visible cursor
-- [ ] portrait sizing
-- [ ] landscape sizing
-- [ ] redraw after `TIOCSWINSZ`
+- [ ] ekran modelini verimli görüntüle
+- [ ] her baytta dev metni baştan oluşturmaktan kaçın
+- [ ] sabit bellek kullanımını koru
+- [ ] görünür imleç
+- [ ] dikey boyutlandırma
+- [ ] yatay boyutlandırma
+- [ ] `TIOCSWINSZ` sonrası yeniden çiz
 
-### Commands/programs
+### Komutlar/programlar
 
 - [ ] `clear`
-- [ ] `printf` ANSI tests
+- [ ] `printf` ANSI testleri
 - [ ] `less`
 - [ ] `nano`
 - [ ] `top`
-- [ ] `vim` basic use
+- [ ] `vim` temel kullanım
 
 ---
 
-## Phase 4 — SSH
+## Aşama 4 — SSH
 
-Do not begin until Phase 2 hardware tests pass and the Phase 3 screen model is usable.
+Aşama 2 donanım testleri geçmeden ve Aşama 3 ekran modeli kullanılabilir olmadan başlama.
 
-### Discovery
+### Keşif
 
-- [ ] locate `ssh` executable on device
-- [ ] record SSH version
-- [ ] inspect supported algorithms
+- [ ] cihazda `ssh` çalıştırılabilir dosyasını bul
+- [ ] SSH sürümünü kaydet
+- [ ] desteklenen algoritmaları incele
 
-### Session
+### Oturum
 
-- [ ] create `SSHSession`
-- [ ] launch `ssh` under PTY
+- [ ] `SSHSession` oluştur
+- [ ] `ssh`'i PTY altında başlat
 - [ ] host
 - [ ] port
-- [ ] username
-- [ ] connect
-- [ ] disconnect
-- [ ] host key prompt
-- [ ] password prompt
-- [ ] child exit handling
+- [ ] kullanıcı adı
+- [ ] bağlan
+- [ ] bağlantıyı kes
+- [ ] host anahtarı istemi
+- [ ] şifre istemi
+- [ ] alt sürecin çıkışını işleme
 
-### Profiles
+### Profiller
 
-- [ ] profile model
-- [ ] add profile
-- [ ] edit profile
-- [ ] delete profile
-- [ ] recent profile
-- [ ] do not store plaintext password
+- [ ] profil modeli
+- [ ] profil ekle
+- [ ] profili düzenle
+- [ ] profili sil
+- [ ] son kullanılan profil
+- [ ] şifreyi düz metin saklama
 
-### Authentication
+### Kimlik doğrulama
 
-- [ ] existing SSH key usage
-- [ ] optional identity-file selection
-- [ ] legacy algorithm options only if actually needed
+- [ ] mevcut SSH anahtarını kullanma
+- [ ] isteğe bağlı kimlik dosyası seçimi
+- [ ] eski algoritma seçenekleri yalnızca gerçekten gerekirse
 
 ---
 
-## Phase 5 — Usability
+## Aşama 5 — Kullanılabilirlik
 
-- [ ] quick commands
-- [ ] command history UX
-- [ ] iPad1Files shortcut
-- [ ] paste safety for large text
-- [ ] font size persistence
-- [ ] profile persistence
-- [ ] reconnect UX
-- [ ] landscape key-bar layout
+- [ ] hızlı komutlar
+- [ ] komut geçmişi deneyimi
+- [ ] iPad1Files kısayolu
+- [ ] büyük metin yapıştırma güvenliği
+- [ ] yazı boyutunun hatırlanması
+- [ ] profillerin kalıcılığı
+- [ ] yeniden bağlanma deneyimi
+- [ ] yatayda tuş çubuğu yerleşimi
 
-Suggested quick commands:
+Önerilen hızlı komutlar:
 
 ```text
 Disk       -> df -h
@@ -176,34 +176,34 @@ Processes  -> ps
 Files      -> cd /var/mobile/Media/iPad1Files/
 ```
 
-Do not add too many hardcoded commands.
+Çok fazla sabit kodlanmış komut ekleme.
 
 ---
 
-## Phase 6 — Stability
+## Aşama 6 — Kararlılık
 
-- [ ] repeated Local Terminal open/close
-- [ ] zombie process check
-- [ ] PTY descriptor leak check
-- [ ] memory-pressure test
-- [ ] long-output test
-- [ ] large-paste test
-- [ ] rotate repeatedly
-- [ ] background/foreground test
-- [ ] child shell exits unexpectedly
-- [ ] PTY read error
-- [ ] app memory warning behavior
+- [ ] Yerel Terminal'i tekrar tekrar aç/kapat
+- [ ] zombi süreç kontrolü
+- [ ] PTY tanımlayıcı sızıntısı kontrolü
+- [ ] bellek baskısı testi
+- [ ] uzun çıktı testi
+- [ ] büyük yapıştırma testi
+- [ ] tekrar tekrar döndür
+- [ ] arka plan/ön plan testi
+- [ ] alt kabuk beklenmedik şekilde çıkıyor
+- [ ] PTY okuma hatası
+- [ ] uygulamanın bellek uyarısı davranışı
 
 ---
 
-## Deferred / not planned for first v1
+## Ertelenen / ilk v1 için planlanmayan
 
-- [ ] multiple simultaneous terminal tabs
-- [ ] SFTP graphical browser
+- [ ] birden fazla eşzamanlı terminal sekmesi
+- [ ] SFTP grafik gezgini
 - [ ] Mosh
 - [ ] Telnet
-- [ ] theme marketplace/system
-- [ ] embedded Web terminal
-- [ ] graphical monitoring dashboard
+- [ ] tema mağazası/sistemi
+- [ ] gömülü Web terminal
+- [ ] grafik izleme paneli
 
-These require explicit approval before implementation.
+Bunlar uygulanmadan önce açık onay gerektirir.

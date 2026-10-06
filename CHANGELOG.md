@@ -1,55 +1,55 @@
-# CHANGELOG
+# DEĞİŞİKLİK GÜNLÜĞÜ
 
-## 0.2.1-alpha1 — prepared
+## 0.2.1-alpha1 — hazırlandı
 
-Input/UI fixes prepared after real-device v0.2 testing:
+v0.2 gerçek cihaz testinden sonra hazırlanan girdi/arayüz düzeltmeleri:
 
-- allow default/Unicode iOS keyboard instead of ASCII-only keyboard
-- enable Turkish character input path
-- set PTY `VERASE` to DEL (`0x7F`)
-- align Backspace with PTY erase configuration
-- move terminal helper row to keyboard `inputAccessoryView`
-- preserve iOS 5 compatibility
+- yalnız ASCII klavye yerine varsayılan/Unicode iOS klavyesine izin verildi
+- Türkçe karakter girdi yolu açıldı
+- PTY `VERASE` değeri DEL (`0x7F`) yapıldı
+- Backspace, PTY silme yapılandırmasıyla uyumlu hale getirildi
+- terminal yardımcı satırı klavyenin `inputAccessoryView`'una taşındı
+- iOS 5 uyumluluğu korundu
 
-Hardware validation still required unless later `SESSION.md` entries say otherwise.
+Daha sonraki `SESSION.md` kayıtları aksini söylemedikçe donanım doğrulaması hâlâ gerekli.
 
 ---
 
 ## 0.2.0-alpha1
 
-- removed separate white command input field
-- added direct keyboard capture
-- added lightweight ANSI/CSI filtering
-- addressed visible `[K` terminal artifacts
-- added basic clear-screen handling
-- improved terminal helper-key UI
-- kept bounded scrollback
-- retained PTY resize support
+- ayrı beyaz komut giriş alanı kaldırıldı
+- doğrudan klavye yakalama eklendi
+- hafif ANSI/CSI filtreleme eklendi
+- görünür `[K` terminal kalıntıları ele alındı
+- temel ekran temizleme eklendi
+- terminal yardımcı tuş arayüzü iyileştirildi
+- sınırlı geri kaydırma geçmişi korundu
+- PTY yeniden boyutlandırma desteği korundu
 
-Real-device findings:
+Gerçek cihaz bulguları:
 
-- Turkish input failed because keyboard was ASCII-only
-- Backspace failed
-- helper bar was hidden behind keyboard
+- klavye yalnız ASCII olduğu için Türkçe girdi başarısızdı
+- Backspace çalışmıyordu
+- yardımcı çubuk klavyenin arkasında kalıyordu
 
 ---
 
 ## 0.1.0-alpha1
 
-Initial Local Terminal prototype:
+İlk Yerel Terminal prototipi:
 
-- Theos skeleton
-- Home screen
-- Local Terminal
+- Theos iskeleti
+- Ana ekran
+- Yerel Terminal
 - POSIX PTY
 - fork/setsid/dup2/exec
 - `/bin/sh -i`
-- background PTY reader
-- direct PTY writing
-- UTF-8 output buffering
-- bounded scrollback
-- terminal resize
+- arka planda PTY okuyucu
+- doğrudan PTY'ye yazma
+- UTF-8 çıktı tamponlama
+- sınırlı geri kaydırma geçmişi
+- terminal yeniden boyutlandırma
 
-Major milestone:
+Büyük kilometre taşı:
 
-**real iPad 1 successfully displayed an interactive shell prompt.**
+**gerçek iPad 1 etkileşimli bir kabuk istemini başarıyla gösterdi.**

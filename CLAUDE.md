@@ -1,10 +1,10 @@
 # CLAUDE
 
-This repository is a legacy iOS project with strict constraints.
+Bu repo, sıkı kısıtları olan eski bir iOS projesidir.
 
-Read `PROJECT_CONTEXT.md` and `SESSION.md` before making changes.
+Değişiklik yapmadan önce `PROJECT_CONTEXT.md` ve `SESSION.md` dosyalarını oku.
 
-## Hard constraints
+## Kesin kısıtlar
 
 ```text
 iPad 1
@@ -18,42 +18,42 @@ non-ARC / MRC
 UIKit / Foundation
 ```
 
-Do not modernize the deployment target.
+Dağıtım hedefini güncelleme.
 
-Do not introduce Swift.
+Swift ekleme.
 
-Do not use iOS APIs unavailable on iOS 5.1.1.
+iOS 5.1.1'de bulunmayan iOS API'lerini kullanma.
 
-Do not add a WebView-based terminal.
+WebView tabanlı terminal ekleme.
 
-## Current build target
+## Güncel derleme hedefi
 
 ```make
 ARCHS = armv7
 TARGET = iphone:clang:6.1:5.1
 ```
 
-This is intentional.
+Bu bilinçli bir tercihtir.
 
-The iPhoneOS9.3 SDK path previously produced bad simulator `.tbd` linker behavior for this armv7 project.
+iPhoneOS9.3 SDK yolu daha önce bu armv7 projesinde hatalı simülatör `.tbd` bağlayıcı davranışı üretti.
 
-## Current project phase
+## Güncel proje aşaması
 
-The PTY/local shell has already been proven on real iPad 1 hardware.
+PTY / yerel kabuk gerçek iPad 1 donanımında zaten kanıtlandı.
 
-Current work is focused on:
+Güncel çalışmanın odağı:
 
-1. input correctness
-2. Turkish/UTF-8 keyboard input
+1. girdi doğruluğu
+2. Türkçe/UTF-8 klavye girdisi
 3. Backspace
-4. helper-key UI
-5. ANSI/VT100 terminal correctness
+4. yardımcı tuş arayüzü
+5. ANSI/VT100 terminal doğruluğu
 
-Do not skip to SSH before `SESSION.md` says the Local Terminal milestone has passed.
+`SESSION.md` Yerel Terminal kilometre taşının geçtiğini söylemeden SSH'e atlama.
 
-## Architecture
+## Mimari
 
-Keep these concepts separate:
+Bu kavramları ayrı tut:
 
 ```text
 TerminalInputView
@@ -64,11 +64,11 @@ future TerminalScreen
 future SSHSession
 ```
 
-## Terminal direction
+## Terminal yönü
 
-The current ANSI parser is transitional.
+Güncel ANSI ayrıştırıcı geçicidir.
 
-The desired next major architecture is:
+İstenen bir sonraki büyük mimari:
 
 ```text
 PTY bytes
@@ -77,32 +77,34 @@ PTY bytes
 -> UIKit renderer
 ```
 
-Do not permanently solve terminal escape codes by just deleting them all.
+(PTY baytları → ANSI ayrıştırıcı → sabit boyutlu ekran/imleç modeli → UIKit görüntüleyici)
 
-## Memory
+Terminal kaçış kodlarını hepsini silerek kalıcı olarak "çözme".
 
-Everything must be designed for 256 MB RAM.
+## Bellek
 
-Keep all histories and buffers bounded.
+Her şey 256 MB RAM için tasarlanmalı.
+
+Tüm geçmişler ve tamponlar sınırlı tutulmalı.
 
 ## MRC
 
-Manual retain/release only.
+Yalnızca manuel retain/release.
 
-Do not convert files to ARC.
+Dosyaları ARC'ye çevirme.
 
-## Testing
+## Test
 
-Real-device behavior is authoritative.
+Belirleyici olan gerçek cihaz davranışıdır.
 
-A successful compile does not prove an API works correctly on iOS 5.1.1.
+Başarılı derleme, bir API'nin iOS 5.1.1'de doğru çalıştığını kanıtlamaz.
 
-After code changes, follow `TESTING.md`.
+Kod değişikliklerinden sonra `TESTING.md`'yi izle.
 
-## Documentation
+## Dokümantasyon
 
-At session end update `SESSION.md`, especially:
+Oturum sonunda `SESSION.md`'yi, özellikle şu bölümü güncelle:
 
 ```text
-Immediate next action
+Hemen yapılacak sonraki adım
 ```

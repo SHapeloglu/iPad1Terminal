@@ -1,10 +1,10 @@
-# SESSION
+# OTURUM
 
-## Current status
+## Güncel durum
 
-Project: `iPad1Terminal`
+Proje: `iPad1Terminal`
 
-Current intended build:
+Hedeflenen güncel derleme:
 
 ```text
 0.2.1-alpha1
@@ -22,7 +22,7 @@ Objective-C / MRC
 Theos
 ```
 
-Working build target:
+Çalışan derleme hedefi:
 
 ```make
 ARCHS = armv7
@@ -31,186 +31,186 @@ TARGET = iphone:clang:6.1:5.1
 
 ---
 
-## Completed
+## Tamamlananlar
 
-### Project bootstrap
+### Proje başlangıcı
 
-- Theos application skeleton
-- iPad-only application configuration
-- armv7 target
-- iOS 5.1 deployment target
-- MRC / no ARC
-- Home screen
-- Local Terminal screen
+- Theos uygulama iskeleti
+- yalnız iPad uygulama yapılandırması
+- armv7 hedefi
+- iOS 5.1 dağıtım hedefi
+- MRC / ARC yok
+- Ana ekran
+- Yerel Terminal ekranı
 
-### PTY / local shell
+### PTY / yerel kabuk
 
-- POSIX PTY allocation
+- POSIX PTY ayırma
 - `posix_openpt`
 - `grantpt`
 - `unlockpt`
 - `ptsname`
 - `fork`
 - `setsid`
-- slave PTY open
+- slave PTY açma
 - stdin/stdout/stderr `dup2`
 - `/bin/sh -i`
-- initial directory `/var/mobile`
-- PTY background reader thread
+- başlangıç dizini `/var/mobile`
+- PTY arka plan okuyucu iş parçacığı
 - `select()` + `read()`
-- main-thread UI delivery
-- PTY write API
-- PTY resize with `TIOCSWINSZ`
-- process cleanup
-- bounded UTF-8 tail buffer
-- bounded terminal scrollback
+- ana iş parçacığında arayüze teslim
+- PTY yazma API'si
+- `TIOCSWINSZ` ile PTY yeniden boyutlandırma
+- süreç temizliği
+- sınırlı UTF-8 kuyruk tamponu
+- sınırlı terminal geri kaydırma geçmişi
 
-### Real-device verification
+### Gerçek cihaz doğrulaması
 
-Real iPad 1 test proved:
+Gerçek iPad 1 testi şunları kanıtladı:
 
-- application launches
-- Local Terminal opens
-- PTY creation works
-- shell starts
-- prompt appears
-- output reaches screen
+- uygulama açılıyor
+- Yerel Terminal açılıyor
+- PTY oluşturma çalışıyor
+- kabuk başlıyor
+- istem görünüyor
+- çıktı ekrana ulaşıyor
 
-### Terminal UI v0.2
+### Terminal arayüzü v0.2
 
-- visible command `UITextField` removed
-- direct terminal keyboard capture introduced
-- basic ANSI parser added
-- raw `[K` issue addressed through CSI filtering
-- basic clear-screen action
-- special terminal keys added
+- görünür komut `UITextField`'ı kaldırıldı
+- doğrudan terminal klavye yakalama eklendi
+- temel ANSI ayrıştırıcı eklendi
+- ham `[K` sorunu CSI filtrelemeyle ele alındı
+- temel ekran temizleme eylemi
+- özel terminal tuşları eklendi
 
-### v0.2.1 input fixes prepared
+### v0.2.1 girdi düzeltmeleri hazırlandı
 
-- Unicode-capable default keyboard
-- Turkish input path enabled
+- Unicode destekli varsayılan klavye
+- Türkçe girdi yolu açıldı
 - `VERASE = 0x7F`
-- Backspace DEL alignment
-- helper row moved to `inputAccessoryView`
-- iOS 5 `UITextView.selectable` incompatibility removed
+- Backspace DEL uyumu
+- yardımcı satır `inputAccessoryView`'a taşındı
+- iOS 5'te olmayan `UITextView.selectable` kaldırıldı
 
 ---
 
-## Important test history
+## Önemli test geçmişi
 
-### Compile issue 1
+### Derleme sorunu 1
 
-`UIReturnKeyReturn` was invalid.
+`UIReturnKeyReturn` geçersizdi.
 
-Fixed with:
+Şununla düzeltildi:
 
 ```objc
 UIReturnKeyDefault
 ```
 
-### Compile issue 2
+### Derleme sorunu 2
 
-`UITextAlignmentCenter` caused an enum conversion warning treated as error with newer SDK headers.
+`UITextAlignmentCenter`, yeni SDK başlıklarında hata sayılan bir enum dönüşüm uyarısına yol açtı.
 
-Resolved for legacy compatibility.
+Eski sürüm uyumluluğu için çözüldü.
 
-### Linker issue
+### Bağlayıcı sorunu
 
-Using:
+Şunu kullanmak:
 
 ```make
 TARGET = iphone:clang:9.3:5.1
 ```
 
-caused simulator `.tbd` warnings and:
+simülatör `.tbd` uyarılarına ve şuna yol açtı:
 
 ```text
 ld: file not found: /usr/lib/system/liblaunch.dylib for architecture armv7
 ```
 
-Resolved by switching to:
+Şuna geçilerek çözüldü:
 
 ```make
 TARGET = iphone:clang:6.1:5.1
 ```
 
-The iPhoneOS6.1 SDK includes:
+iPhoneOS6.1 SDK şunu içerir:
 
 ```text
 /usr/lib/system/liblaunch.dylib
 ```
 
-### Compile issue 3
+### Derleme sorunu 3
 
-`UITextView.selectable` is unavailable on iOS 5.1.1.
+`UITextView.selectable` iOS 5.1.1'de yok.
 
-The line was removed.
+Satır kaldırıldı.
 
 ---
 
-## Real-device UI findings
+## Gerçek cihaz arayüz bulguları
 
-The v0.1 screenshot showed raw ANSI text:
+v0.1 ekran görüntüsü ham ANSI metni gösterdi:
 
 ```text
 [Ksh-4.0$
 ```
 
-The v0.2 screenshot showed improved prompt display, but:
+v0.2 ekran görüntüsü istem gösteriminin iyileştiğini gösterdi, ancak:
 
-- Turkish characters could not be typed
-- Backspace did not erase
-- helper key bar was obscured by the software keyboard
+- Türkçe karakterler yazılamıyordu
+- Backspace silmiyordu
+- yardımcı tuş çubuğu yazılım klavyesinin arkasında kalıyordu
 
-These are the reasons for v0.2.1.
-
----
-
-## Decisions
-
-1. Do not start SSH until local terminal input is stable.
-2. Do not implement SSH cryptography in-app initially.
-3. Future SSH should run an installed `ssh` binary under PTY.
-4. Full ANSI/VT100 screen-buffer work comes before serious remote-shell use.
-5. Keep scrollback bounded.
-6. Keep MRC.
-7. Keep SDK 6.1 / deployment 5.1 unless a verified compatibility reason requires change.
-8. Do not use newer UIKit properties that are unavailable on iOS 5.1.1.
-9. Do not add heavy dependencies.
-10. Keep the application focused on terminal/SSH responsibilities.
+v0.2.1'in nedenleri bunlar.
 
 ---
 
-## Known issues
+## Kararlar
 
-- v0.2.1 fixes still require final hardware validation unless superseded by a later entry.
-- ANSI parser is not a real terminal screen emulator.
-- cursor row/column model does not exist yet.
-- `vim`, `nano`, `top`, `less`, `htop` are not yet acceptance criteria.
-- SSH is not implemented.
-- connection profiles are not implemented.
+1. Yerel terminal girdisi kararlı olmadan SSH'e başlama.
+2. Başlangıçta SSH kriptografisini uygulama içinde yazma.
+3. Gelecekteki SSH, kurulu `ssh` ikilisini PTY altında çalıştırmalı.
+4. Ciddi uzak kabuk kullanımından önce tam ANSI/VT100 ekran tamponu çalışması gelir.
+5. Geri kaydırma geçmişini sınırlı tut.
+6. MRC'yi koru.
+7. Doğrulanmış bir uyumluluk nedeni gerektirmedikçe SDK 6.1 / dağıtım hedefi 5.1'i koru.
+8. iOS 5.1.1'de bulunmayan yeni UIKit özelliklerini kullanma.
+9. Ağır bağımlılıklar ekleme.
+10. Uygulamayı terminal/SSH sorumluluklarına odaklı tut.
 
 ---
 
-## Immediate next action
+## Bilinen sorunlar
 
-Build and install `0.2.1-alpha1`.
+- v0.2.1 düzeltmeleri, daha sonraki bir kayıtla geçersiz kılınmadıkça hâlâ son donanım doğrulamasını bekliyor.
+- ANSI ayrıştırıcı gerçek bir terminal ekran öykünücüsü değil.
+- imleç satır/sütun modeli henüz yok.
+- `vim`, `nano`, `top`, `less`, `htop` henüz kabul ölçütü değil.
+- SSH yok.
+- bağlantı profilleri yok.
 
-Test inside the application:
+---
+
+## Hemen yapılacak sonraki adım
+
+`0.2.1-alpha1`'i derle ve kur.
+
+Uygulama içinde test et:
 
 ```text
 Türkçe: ğüşiöç İĞÜŞÖÇ
 ```
 
-Test Backspace before Enter.
+Enter'dan önce Backspace'i test et.
 
-Confirm helper keys appear above the keyboard:
+Yardımcı tuşların klavyenin üstünde göründüğünü doğrula:
 
 ```text
 Esc | Ctrl+C | Tab | < | ^ | v | > | ~ | |
 ```
 
-Then test:
+Ardından test et:
 
 ```bash
 pwd
@@ -219,8 +219,8 @@ ls -la
 clear
 ```
 
-If all pass:
+Hepsi geçerse:
 
-**next implementation phase = real ANSI/VT100 screen buffer and cursor model.**
+**sonraki uygulama aşaması = gerçek ANSI/VT100 ekran tamponu ve imleç modeli.**
 
-Do not jump directly to SSH.
+Doğrudan SSH'e atlama.

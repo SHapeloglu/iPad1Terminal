@@ -1,8 +1,8 @@
 # AGENTS
 
-## Mandatory first read
+## Zorunlu ilk okuma
 
-Before changing code, read in this order:
+Kodu değiştirmeden önce şu sırayla oku:
 
 1. `PROJECT_CONTEXT.md`
 2. `SESSION.md`
@@ -12,15 +12,15 @@ Before changing code, read in this order:
 6. `INTEGRATION.md`
 7. `README.md`
 
-`PROJECT_CONTEXT.md` contains the permanent project constraints.
+`PROJECT_CONTEXT.md` kalıcı proje kısıtlarını içerir.
 
-`SESSION.md` contains the latest actual state and the immediate next action.
+`SESSION.md` en son gerçek durumu ve hemen yapılacak sonraki adımı içerir.
 
 ---
 
-## Non-negotiable constraints
+## Değiştirilemez kısıtlar
 
-Never silently change:
+Bunları asla sessizce değiştirme:
 
 ```text
 iPad 1
@@ -34,41 +34,39 @@ MRC / non-ARC
 UIKit / Foundation
 ```
 
-No Swift.
+Swift yok.
 
-No modern API migration.
+Güncel API'ye geçiş yok.
 
-No WebView terminal.
+WebView tabanlı terminal yok.
 
-No heavy dependency added without explicit approval.
+Açık onay olmadan ağır bağımlılık eklenmez.
 
 ---
 
-## Current SDK rule
+## Güncel SDK kuralı
 
-Use:
+Daha sonra belgelenmiş bir karar değiştirmedikçe şunu kullan:
 
 ```make
 TARGET = iphone:clang:6.1:5.1
 ```
 
-unless a later documented decision changes it.
-
-Do not revert to the 9.3 SDK target that produced simulator `.tbd` / armv7 linker problems.
+Simülatör `.tbd` / armv7 bağlayıcı sorunları üreten 9.3 SDK hedefine geri dönme.
 
 ---
 
-## Current phase rule
+## Güncel aşama kuralı
 
-Do not start SSH until the current Local Terminal/input and ANSI screen-buffer milestones are completed as described in `SESSION.md` and `TASKS.md`.
+`SESSION.md` ve `TASKS.md`'de anlatılan güncel Yerel Terminal/girdi ve ANSI ekran tamponu kilometre taşları tamamlanmadan SSH'e başlama.
 
-The user explicitly wants a real terminal application, not merely a thin SSH launcher.
+Kullanıcı açıkça yalnızca ince bir SSH başlatıcı değil, gerçek bir terminal uygulaması istiyor.
 
 ---
 
-## Code organization
+## Kod organizasyonu
 
-Keep responsibilities separate:
+Sorumlulukları ayrı tut:
 
 ```text
 TerminalViewController
@@ -79,114 +77,114 @@ future TerminalScreen
 future SSHSession
 ```
 
-Do not put all logic into one controller.
+Tüm mantığı tek bir controller'a koyma.
 
 ---
 
-## MRC rules
+## MRC kuralları
 
-- every `alloc/init`, `copy`, `retain` must have clear ownership
-- release owned ivars in `dealloc`
-- delegates should generally be `assign` in this legacy architecture
-- avoid retain cycles
-- use autorelease pools in long-running background loops
-
----
-
-## Memory rules
-
-iPad 1 has 256 MB RAM.
-
-Required:
-
-- bounded scrollback
-- bounded parser state
-- bounded screen buffer
-- small read buffers
-- avoid unlimited arrays/strings
-- avoid multiple terminal sessions by default
-- no expensive animated UI
+- her `alloc/init`, `copy`, `retain` için sahiplik açık olmalı
+- sahip olunan ivar'ları `dealloc`'ta serbest bırak
+- bu eski mimaride delegate'ler genelde `assign` olmalı
+- retain döngülerinden kaçın
+- uzun süren arka plan döngülerinde autorelease pool kullan
 
 ---
 
-## Compatibility rules
+## Bellek kuralları
 
-Never assume an API exists on iOS 5.1.1.
+iPad 1'de 256 MB RAM var.
 
-Examples already discovered:
+Gerekenler:
 
-- `UITextView.selectable` is not available
-- newer SDK enum typing may create warnings treated as errors
-
-If a modern SDK header compiles but runtime support is uncertain, verify iOS 5 availability before using it.
-
----
-
-## Terminal correctness
-
-Do not “fix” ANSI behavior merely by stripping all escape codes permanently.
-
-The current lightweight parser is transitional.
-
-The target is a real bounded terminal screen model.
+- sınırlı geri kaydırma geçmişi (scrollback)
+- sınırlı ayrıştırıcı durumu
+- sınırlı ekran tamponu
+- küçük okuma tamponları
+- sınırsız dizi/metinlerden kaçın
+- varsayılan olarak birden fazla terminal oturumundan kaçın
+- pahalı animasyonlu arayüz yok
 
 ---
 
-## Security
+## Uyumluluk kuralları
 
-Never:
+Bir API'nin iOS 5.1.1'de var olduğunu asla varsayma.
 
-- log passwords
-- log private keys
-- store plaintext SSH passwords in plist
-- allow arbitrary external command execution through URL schemes
+Daha önce karşılaşılan örnekler:
+
+- `UITextView.selectable` mevcut değil
+- yeni SDK enum tiplemesi hata sayılan uyarılar üretebiliyor
+
+Güncel bir SDK başlığı derleniyor ama çalışma zamanı desteği belirsizse, kullanmadan önce iOS 5'te bulunduğunu doğrula.
 
 ---
 
-## Documentation update rule
+## Terminal doğruluğu
 
-After a meaningful coding/testing session update:
+ANSI davranışını tüm kaçış kodlarını kalıcı olarak silerek "düzeltme".
+
+Güncel hafif ayrıştırıcı geçicidir.
+
+Hedef, gerçek ve sınırlı bir terminal ekran modelidir.
+
+---
+
+## Güvenlik
+
+Asla:
+
+- şifreleri günlüğe yazma
+- özel anahtarları günlüğe yazma
+- SSH şifrelerini plist içinde düz metin saklama
+- URL scheme'leri üzerinden keyfi harici komut çalıştırmaya izin verme
+
+---
+
+## Doküman güncelleme kuralı
+
+Anlamlı bir kodlama/test oturumundan sonra güncelle:
 
 - `SESSION.md`
+- testler değiştiyse `TESTING.md`
+- tasarım değiştiyse `ARCHITECTURE.md`
+- yalnızca kalıcı proje düzeyi kararlar için `PROJECT_CONTEXT.md`
 - `TASKS.md`
-- `TESTING.md` when tests change
-- `ARCHITECTURE.md` when design changes
-- `PROJECT_CONTEXT.md` only for durable project-level decisions
 
-`SESSION.md` must always end with a clear:
+`SESSION.md` her zaman açık bir şekilde şu bölümle bitmelidir:
 
 ```text
-Immediate next action
+Hemen yapılacak sonraki adım
 ```
 
-so a new chat can continue without guessing.
+böylece yeni bir sohbet tahmin yürütmeden devam edebilir.
 
 ---
 
-## Git rule
+## Git kuralı
 
-Before pushing:
+Push'tan önce:
 
 ```bash
 git status -sb
 git diff --check
 ```
 
-Do not commit:
+Commit etme:
 
 - `.theos/`
-- generated package build directories
-- temporary files
-- passwords
-- private keys
+- üretilen paket derleme klasörleri
+- geçici dosyalar
+- şifreler
+- özel anahtarlar
 
-Commit source and project documentation.
+Kaynak kodu ve proje dokümantasyonunu commit et.
 
-Generated `.deb` packages should only be committed if explicitly desired.
+Üretilen `.deb` paketleri yalnızca açıkça istenirse commit edilmelidir.
 
 ---
 
-## Development priority
+## Geliştirme önceliği
 
 ```text
 stability
@@ -197,3 +195,5 @@ usability
 SSH
 advanced features
 ```
+
+(kararlılık → uyumluluk → terminal doğruluğu → düşük RAM → kullanılabilirlik → SSH → gelişmiş özellikler)
